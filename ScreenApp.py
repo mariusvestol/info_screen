@@ -7,61 +7,63 @@ from WeatherFrame import WeatherFrame
 from TimeFrame import TimeFrame
 from TodoFrame import TodoFrame
 
-
-#Style
+# Stil
 from ScreenStyle import ScreenStyle as ss
 
-
-BG_COLOR = "#f9f9f9"
-color = "#ADD8E6"
-HEADER_COLOR = color;
+# Aksent hentes fra ScreenStyle – én kilde til sannhet
+ACCENT = ss.ACCENT
 
 
-# --- Fullscreen toggle ---
+# ── Fullscreen-toggle ─────────────────────────────────────────────────
 fullscreen = False
+
 def toggle_fullscreen(event=None):
     global fullscreen
     fullscreen = not fullscreen
     root.attributes("-fullscreen", fullscreen)
 
 
+# ── Rotvindu ──────────────────────────────────────────────────────────
+# Antakelse: appen kjøres typisk i fullscreen (F11). 1000×800 er et
+# fornuftig utgangspunkt for utvikling; timeren er nå pakket dynamisk
+# til høyre slik at layout fungerer i alle bredder.
 root = tk.Tk()
 root.title("Info Skjerm")
-root.geometry("600x800")
+root.geometry("1000x800")
 root.configure(bg=ss.BG_COLOR)
+root.resizable(True, True)
 root.bind("<F11>", toggle_fullscreen)
 
 
+# ── Topplinje: Hilsen (venstre) + Klokke (høyre) ─────────────────────
+# Bruker pack i stedet for place() for å sikre korrekt layout i alle
+# vindusbredder og under fullscreen.
+top_bar = tk.Frame(root, bg=ss.BG_COLOR)
+top_bar.pack(fill="x", padx=ss.PAD_OUTER, pady=(ss.PAD_OUTER, ss.PAD_SECTION))
 
-# Init greeting
-greeting_frame = tk.Frame(root, bg=BG_COLOR)
-greeting_frame.pack(pady=10, anchor="w", padx=20)
-tk.Label(greeting_frame, text="God kveld", font=ss.FONT_HEADER, fg=HEADER_COLOR, bg=BG_COLOR).pack(anchor="w")
-tk.Label(greeting_frame, text="mester", font=ss.FONT_HEADER, fg=HEADER_COLOR, bg=BG_COLOR).pack(anchor="w")
+greeting_frame = tk.Frame(top_bar, bg=ss.BG_COLOR)
+greeting_frame.pack(side="left", anchor="nw")
+tk.Label(greeting_frame, text="God kveld", font=ss.FONT_GREETING,
+         fg=ACCENT, bg=ss.BG_COLOR).pack(anchor="w")
+tk.Label(greeting_frame, text="mester",    font=ss.FONT_GREETING,
+         fg=ACCENT, bg=ss.BG_COLOR).pack(anchor="w")
 
-
-#Init time
-timeFrame = TimeFrame(root, color)
-timeFrame.place(x=750, y=10)
-
-
-# Init bus
-busFrame = BusFrame(root, color)
-busFrame.pack(pady=30, padx=20, fill="x")
-
-
-#Init calendar
-calendarFrame = CalendarFrame(root, color)
-calendarFrame.pack(pady=10, padx=20, fill="x")
+timeFrame = TimeFrame(top_bar, ACCENT)
+timeFrame.pack(side="right", anchor="ne")
 
 
-#Init weatherFrame
-weatherFrame = WeatherFrame(root, color)
-weatherFrame.pack(pady=10, padx=20, fill="x")
+# ── Innholdskort ──────────────────────────────────────────────────────
+busFrame = BusFrame(root, ACCENT)
+busFrame.pack(pady=(0, ss.PAD_SECTION), padx=ss.PAD_OUTER, fill="x")
 
-#Init TodoFrame
-todoFrame = TodoFrame(root, color)
-todoFrame.pack(pady=10, padx=20, fill="x")
+calendarFrame = CalendarFrame(root, ACCENT)
+calendarFrame.pack(pady=(0, ss.PAD_SECTION), padx=ss.PAD_OUTER, fill="x")
+
+weatherFrame = WeatherFrame(root, ACCENT)
+weatherFrame.pack(pady=(0, ss.PAD_SECTION), padx=ss.PAD_OUTER, fill="x")
+
+todoFrame = TodoFrame(root, ACCENT)
+todoFrame.pack(pady=(0, ss.PAD_SECTION), padx=ss.PAD_OUTER, fill="x")
 
 
 root.mainloop()

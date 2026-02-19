@@ -1,26 +1,46 @@
 import tkinter as tk
 import requests
 from dateutil import parser
-from ScreenStyle import ScreenStyle as ss  # Samme styling som CalendarFrame
+
+from ScreenStyle import ScreenStyle as ss
 
 
 class TodoFrame(tk.Frame):
+    """
+    Henter og viser aktive Todoist-oppgaver sortert etter frist.
+
+    Kortstruktur
+    ────────────
+    ┌─ TodoFrame (card border) ────────────────────┐
+    │  header:  "Tasks"                            │
+    │  divider: ───────────────────────────────    │
+    │  content: 19.02  Forberede presentasjon      │
+    │           TBD    Kjøpe mat                   │
+    └───────────────────────────────────────────────┘
+    """
+
     def __init__(self, parent, color):
-        super().__init__(parent, bg="white", bd=0, relief="solid")
+        super().__init__(parent, **ss.card_kwargs())
         self.api_token = "336e15184c172256e5a482b78dbce8d011284a9d"
-        self.color = color
-        self.headers = {"Authorization": f"Bearer {self.api_token}"}
+        self.color     = color
+        self.headers   = {"Authorization": f"Bearer {self.api_token}"}
         self.all_tasks = []
 
-        # Overskrift
-        tk.Label(self, text="Tasks", fg=self.color, font=ss.FONT_SMALL, bg="white", anchor="w")\
-            .grid(row=0, column=0, sticky="w", padx=10, pady=5)
+        # ── Persistent layout ─────────────────────────────────────────
+        header = tk.Frame(self, bg=ss.CARD_COLOR)
+        header.pack(fill="x", padx=ss.PAD_CARD, pady=(ss.PAD_CARD, 4))
+        tk.Label(header, text="Tasks", font=ss.FONT_SECTION,
+                 fg=self.color, bg=ss.CARD_COLOR).pack(anchor="w")
 
-        # Container for oppgavene
-        self.tasks_container = tk.Frame(self, bg="white")
-        self.tasks_container.grid(row=1, column=0, sticky="w", padx=10)
+        tk.Frame(self, bg=ss.DIVIDER, height=1).pack(fill="x", padx=ss.PAD_CARD)
+
+        self.tasks_container = tk.Frame(self, bg=ss.CARD_COLOR)
+        self.tasks_container.pack(fill="x", padx=ss.PAD_CARD,
+                                   pady=(4, ss.PAD_CARD))
 
         self.update_tasks()
+
+    # ── API-henting ───────────────────────────────────────────────────
 
     def safe_fetch_tasks(self):
         """Henter Todoist-oppgaver trygt med try/except."""
@@ -33,21 +53,24 @@ class TodoFrame(tk.Frame):
             print(f"Kunne ikke hente Todoist-oppgaver: {e}")
             return []
 
+    # ── Render ────────────────────────────────────────────────────────
+
     def update_tasks(self):
-        # Tøm eksisterende widgets
         for widget in self.tasks_container.winfo_children():
             widget.destroy()
 
         self.all_tasks = self.safe_fetch_tasks()
 
         if not self.all_tasks:
-            tk.Label(self.tasks_container, text="Ingen aktive oppgaver 🎉", font=ss.FONT_SMALL, bg="white")\
-                .pack(anchor="w")
+            tk.Label(self.tasks_container,
+                     text="Ingen aktive oppgaver 🎉",
+                     font=ss.FONT_BODY,
+                     fg=ss.TEXT_SECONDARY,
+                     bg=ss.CARD_COLOR).pack(anchor="w")
         else:
-            tasks_with_date = []
+            tasks_with_date    = []
             tasks_without_date = []
 
-            # Del opp i oppgaver med og uten dato
             for task in self.all_tasks:
                 due = task.get("due")
                 if due and (due.get("datetime") or due.get("date")):
@@ -60,28 +83,31 @@ class TodoFrame(tk.Frame):
                 else:
                     tasks_without_date.append((None, task["content"]))
 
-            # Sorter med dato først, så uten
-            tasks_sorted = sorted(tasks_with_date, key=lambda x: x[0]) + tasks_without_date
+            tasks_sorted = (
+                sorted(tasks_with_date, key=lambda x: x[0])
+                + tasks_without_date
+            )
 
-            # Legg inn i GUI
             for dt, content in tasks_sorted:
                 if dt:
-                    # Hvis klokkeslett = 00:00 → vis bare dato
-                    if dt.time().hour == 0 and dt.time().minute == 0:
-                        date_str = dt.strftime("%d.%m")
-                    else:
-                        date_str = dt.strftime("%d.%m %H:%M")
+                    # Kun dato hvis klokkeslett er midnatt (heldagsoppgave)
+                    date_str = (
+                        dt.strftime("%d.%m")
+                        if dt.time().hour == 0 and dt.time().minute == 0
+                        else dt.strftime("%d.%m %H:%M")
+                    )
                 else:
                     date_str = "TBD"
 
-                # Først dato i farget tekst
-                row_frame = tk.Frame(self.tasks_container, bg="white")
-                row_frame.pack(anchor="w", pady=1, fill="x")
+                row = tk.Frame(self.tasks_container, bg=ss.CARD_COLOR)
+                row.pack(anchor="w", pady=2, fill="x")
 
-                tk.Label(row_frame, text=date_str, fg=self.color, font=ss.FONT_SMALL, bg="white")\
-                    .pack(side="left")
-                tk.Label(row_frame, text=f" - {content}", font=ss.FONT_SMALL, bg="white")\
-                    .pack(side="left")
+                tk.Label(row, text=date_str,
+                         fg=self.color, font=ss.FONT_BODY,
+                         bg=ss.CARD_COLOR, width=10, anchor="w").pack(side="left")
+                tk.Label(row, text=content,
+                         font=ss.FONT_BODY, fg=ss.TEXT_PRIMARY,
+                         bg=ss.CARD_COLOR, anchor="w").pack(side="left")
 
-        # Oppdater hvert 60. sekund
+        # Oppdater hvert minutt
         self.after(60000, self.update_tasks)
