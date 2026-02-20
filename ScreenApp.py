@@ -1,4 +1,5 @@
 import tkinter as tk
+from datetime import datetime
 
 # Frames
 from BusFrame import BusFrame
@@ -8,10 +9,21 @@ from TimeFrame import TimeFrame
 from TodoFrame import TodoFrame
 
 # Stil
-from ScreenStyle import ScreenStyle as ss
+from ScreenStyle import ScreenStyle as ss, RoundedCard
 
 # Aksent hentes fra ScreenStyle – én kilde til sannhet
 ACCENT = ss.ACCENT
+
+
+# ── Hilsen basert på tid på døgnet ────────────────────────────────────
+def get_greeting():
+    hour = datetime.now().hour
+    if 5 <= hour < 12:
+        return "God morgen"
+    elif 12 <= hour < 18:
+        return "God ettermiddag"
+    else:
+        return "God kveld"
 
 
 # ── Fullscreen-toggle ─────────────────────────────────────────────────
@@ -24,9 +36,6 @@ def toggle_fullscreen(event=None):
 
 
 # ── Rotvindu ──────────────────────────────────────────────────────────
-# Antakelse: appen kjøres typisk i fullscreen (F11). 1000×800 er et
-# fornuftig utgangspunkt for utvikling; timeren er nå pakket dynamisk
-# til høyre slik at layout fungerer i alle bredder.
 root = tk.Tk()
 root.title("Info Skjerm")
 root.geometry("1000x800")
@@ -36,34 +45,40 @@ root.bind("<F11>", toggle_fullscreen)
 
 
 # ── Topplinje: Hilsen (venstre) + Klokke (høyre) ─────────────────────
-# Bruker pack i stedet for place() for å sikre korrekt layout i alle
-# vindusbredder og under fullscreen.
 top_bar = tk.Frame(root, bg=ss.BG_COLOR)
 top_bar.pack(fill="x", padx=ss.PAD_OUTER, pady=(ss.PAD_OUTER, ss.PAD_SECTION))
 
-greeting_frame = tk.Frame(top_bar, bg=ss.BG_COLOR)
-greeting_frame.pack(side="left", anchor="nw")
-tk.Label(greeting_frame, text="God kveld", font=ss.FONT_GREETING,
-         fg=ACCENT, bg=ss.BG_COLOR).pack(anchor="w")
-tk.Label(greeting_frame, text="mester",    font=ss.FONT_GREETING,
-         fg=ACCENT, bg=ss.BG_COLOR).pack(anchor="w")
+greeting_label = tk.Label(top_bar, text=get_greeting(), font=ss.FONT_GREETING,
+                          fg=ACCENT, bg=ss.BG_COLOR)
+greeting_label.pack(side="left", anchor="w")
 
 timeFrame = TimeFrame(top_bar, ACCENT)
 timeFrame.pack(side="right", anchor="ne")
 
 
-# ── Innholdskort ──────────────────────────────────────────────────────
-busFrame = BusFrame(root, ACCENT)
-busFrame.pack(pady=(0, ss.PAD_SECTION), padx=ss.PAD_OUTER, fill="x")
+def update_greeting():
+    greeting_label.config(text=get_greeting())
+    root.after(60000, update_greeting)
 
-calendarFrame = CalendarFrame(root, ACCENT)
-calendarFrame.pack(pady=(0, ss.PAD_SECTION), padx=ss.PAD_OUTER, fill="x")
+update_greeting()
 
-weatherFrame = WeatherFrame(root, ACCENT)
-weatherFrame.pack(pady=(0, ss.PAD_SECTION), padx=ss.PAD_OUTER, fill="x")
 
-todoFrame = TodoFrame(root, ACCENT)
-todoFrame.pack(pady=(0, ss.PAD_SECTION), padx=ss.PAD_OUTER, fill="x")
+# ── Innholdskort med avrundede hjørner ────────────────────────────────
+bus_card = RoundedCard(root)
+bus_card.pack(pady=(0, ss.PAD_SECTION), padx=ss.PAD_OUTER, fill="x")
+BusFrame(bus_card.inner, ACCENT).pack(fill="both", expand=True)
+
+cal_card = RoundedCard(root)
+cal_card.pack(pady=(0, ss.PAD_SECTION), padx=ss.PAD_OUTER, fill="x")
+CalendarFrame(cal_card.inner, ACCENT).pack(fill="both", expand=True)
+
+weather_card = RoundedCard(root)
+weather_card.pack(pady=(0, ss.PAD_SECTION), padx=ss.PAD_OUTER, fill="x")
+WeatherFrame(weather_card.inner, ACCENT).pack(fill="both", expand=True)
+
+todo_card = RoundedCard(root)
+todo_card.pack(pady=(0, ss.PAD_SECTION), padx=ss.PAD_OUTER, fill="x")
+TodoFrame(todo_card.inner, ACCENT).pack(fill="both", expand=True)
 
 
 root.mainloop()

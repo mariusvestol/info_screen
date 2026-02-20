@@ -59,55 +59,62 @@ class TodoFrame(tk.Frame):
         for widget in self.tasks_container.winfo_children():
             widget.destroy()
 
-        self.all_tasks = self.safe_fetch_tasks()
+        try:
+            self.all_tasks = self.safe_fetch_tasks()
 
-        if not self.all_tasks:
+            if not self.all_tasks:
+                tk.Label(self.tasks_container,
+                         text="Ingen aktive oppgaver",
+                         font=ss.FONT_BODY,
+                         fg=ss.TEXT_SECONDARY,
+                         bg=ss.CARD_COLOR).pack(anchor="w")
+            else:
+                tasks_with_date    = []
+                tasks_without_date = []
+
+                for task in self.all_tasks:
+                    due = task.get("due")
+                    if due and (due.get("datetime") or due.get("date")):
+                        try:
+                            dt_str = due.get("datetime") or due.get("date")
+                            dt = parser.isoparse(dt_str)
+                            tasks_with_date.append((dt, task["content"]))
+                        except Exception:
+                            tasks_without_date.append((None, task["content"]))
+                    else:
+                        tasks_without_date.append((None, task["content"]))
+
+                tasks_sorted = (
+                    sorted(tasks_with_date, key=lambda x: x[0])
+                    + tasks_without_date
+                )
+
+                for dt, content in tasks_sorted:
+                    if dt:
+                        date_str = (
+                            dt.strftime("%d.%m")
+                            if dt.time().hour == 0 and dt.time().minute == 0
+                            else dt.strftime("%d.%m %H:%M")
+                        )
+                    else:
+                        date_str = "TBD"
+
+                    row = tk.Frame(self.tasks_container, bg=ss.CARD_COLOR)
+                    row.pack(anchor="w", pady=2, fill="x")
+
+                    tk.Label(row, text=date_str,
+                             fg=self.color, font=ss.FONT_BODY,
+                             bg=ss.CARD_COLOR, width=10, anchor="w").pack(side="left")
+                    tk.Label(row, text=content,
+                             font=ss.FONT_BODY, fg=ss.TEXT_PRIMARY,
+                             bg=ss.CARD_COLOR, anchor="w").pack(side="left")
+        except Exception as e:
+            print(f"Feil ved visning av oppgaver: {e}")
             tk.Label(self.tasks_container,
-                     text="Ingen aktive oppgaver 🎉",
+                     text="Kunne ikke laste oppgaver",
                      font=ss.FONT_BODY,
                      fg=ss.TEXT_SECONDARY,
                      bg=ss.CARD_COLOR).pack(anchor="w")
-        else:
-            tasks_with_date    = []
-            tasks_without_date = []
-
-            for task in self.all_tasks:
-                due = task.get("due")
-                if due and (due.get("datetime") or due.get("date")):
-                    try:
-                        dt_str = due.get("datetime") or due.get("date")
-                        dt = parser.isoparse(dt_str)
-                        tasks_with_date.append((dt, task["content"]))
-                    except Exception:
-                        tasks_without_date.append((None, task["content"]))
-                else:
-                    tasks_without_date.append((None, task["content"]))
-
-            tasks_sorted = (
-                sorted(tasks_with_date, key=lambda x: x[0])
-                + tasks_without_date
-            )
-
-            for dt, content in tasks_sorted:
-                if dt:
-                    # Kun dato hvis klokkeslett er midnatt (heldagsoppgave)
-                    date_str = (
-                        dt.strftime("%d.%m")
-                        if dt.time().hour == 0 and dt.time().minute == 0
-                        else dt.strftime("%d.%m %H:%M")
-                    )
-                else:
-                    date_str = "TBD"
-
-                row = tk.Frame(self.tasks_container, bg=ss.CARD_COLOR)
-                row.pack(anchor="w", pady=2, fill="x")
-
-                tk.Label(row, text=date_str,
-                         fg=self.color, font=ss.FONT_BODY,
-                         bg=ss.CARD_COLOR, width=10, anchor="w").pack(side="left")
-                tk.Label(row, text=content,
-                         font=ss.FONT_BODY, fg=ss.TEXT_PRIMARY,
-                         bg=ss.CARD_COLOR, anchor="w").pack(side="left")
 
         # Oppdater hvert minutt
         self.after(60000, self.update_tasks)
