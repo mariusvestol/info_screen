@@ -9,14 +9,19 @@ class ScreenStyle:
     """
 
     # ── Fargepalett ────────────────────────────────────────────────────
-    BG_COLOR        = "#F0F2F5"   # Sidebackgrunn – kjølig lys grå
-    CARD_COLOR      = "#FFFFFF"   # Kortbakgrunn
+    # Gradient-bakgrunn (Apple-stil)
+    GRAD_TOP        = "#C7D2FE"   # Myk indigo (topp)
+    GRAD_BOTTOM     = "#FBCFE8"   # Myk rosa (bunn)
+    BG_COLOR        = "#E4D0F3"   # Midtpunkt – brukes som fallback
+    CARD_COLOR      = "#FFFFFF"   # Kortbakgrunn (brukes inne i kort)
+    CARD_FROSTED    = "#F8F9FCEE" # Frosted glass – kan ikke bruke alpha i tk,
+    CARD_FILL       = "#F1F2F6"   # Simulert frosted glass-farge
     ACCENT          = "#3B82F6"   # Primæraksent – moderne blå
     ACCENT_LIGHT    = "#DBEAFE"   # Lys aksent (bakgrunn-highlight)
     TEXT_PRIMARY    = "#111827"   # Primærtekst – nesten svart
     TEXT_SECONDARY  = "#6B7280"   # Sekundærtekst – mellomsgrå
     TEXT_MUTED      = "#9CA3AF"   # Dempet tekst
-    DIVIDER         = "#E5E7EB"   # Skillelinje / borderfarge
+    DIVIDER         = "#E0E0E6"   # Skillelinje / borderfarge (mykere)
     SUCCESS         = "#10B981"   # Grønn aksent
     WARNING         = "#F59E0B"   # Gul/amber aksent
 
@@ -50,7 +55,7 @@ class ScreenStyle:
         Kantene håndteres av RoundedCard-wrapperen.
         """
         return dict(
-            bg=cls.CARD_COLOR,
+            bg=cls.CARD_FILL,
             highlightthickness=0,
             bd=0,
         )
@@ -60,9 +65,46 @@ class ScreenStyle:
         self.HEADER_COLOR = color or self.ACCENT
 
 
+class GradientCanvas(tk.Canvas):
+    """
+    Fullskjerm-Canvas som tegner en vertikal gradient fra GRAD_TOP til
+    GRAD_BOTTOM.  Bruk med place(x=0, y=0, relwidth=1, relheight=1).
+    """
+
+    def __init__(self, parent):
+        super().__init__(parent, highlightthickness=0, bd=0)
+        self._c1 = self._hex_rgb(ScreenStyle.GRAD_TOP)
+        self._c2 = self._hex_rgb(ScreenStyle.GRAD_BOTTOM)
+        self.bind("<Configure>", self._draw)
+
+    @staticmethod
+    def _hex_rgb(h):
+        h = h.lstrip("#")
+        return int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16)
+
+    def _draw(self, event=None):
+        self.delete("grad")
+        w = self.winfo_width()
+        h = self.winfo_height()
+        if h < 2:
+            return
+        r1, g1, b1 = self._c1
+        r2, g2, b2 = self._c2
+        # Tegn 1 rektangel per 2 piksler for ytelse
+        step = max(h // 200, 2)
+        for y in range(0, h, step):
+            t = y / max(h - 1, 1)
+            r = int(r1 + (r2 - r1) * t)
+            g = int(g1 + (g2 - g1) * t)
+            b = int(b1 + (b2 - b1) * t)
+            self.create_rectangle(0, y, w, y + step,
+                                  fill=f"#{r:02x}{g:02x}{b:02x}",
+                                  outline="", tags="grad")
+
+
 class RoundedCard(tk.Canvas):
     """
-    Canvas-basert kort med avrundede hjørner.
+    Canvas-basert kort med avrundede hjørner og frosted glass-effekt.
     Tegner en avrundet rektangel-bakgrunn og inneholder en inner-frame
     for innhold.  Bruk:
         card = RoundedCard(parent)
@@ -70,13 +112,13 @@ class RoundedCard(tk.Canvas):
         MyFrame(card.inner, ...).pack(fill="both", expand=True)
     """
 
-    def __init__(self, parent, radius=16):
+    def __init__(self, parent, radius=18):
         super().__init__(parent, bg=ScreenStyle.BG_COLOR,
                          highlightthickness=0, bd=0)
         self._r = radius
         self._pad = 3
 
-        self.inner = tk.Frame(self, bg=ScreenStyle.CARD_COLOR,
+        self.inner = tk.Frame(self, bg=ScreenStyle.CARD_FILL,
                               highlightthickness=0, bd=0)
         self._win = self.create_window(self._pad, self._pad,
                                        window=self.inner, anchor="nw")
@@ -94,8 +136,8 @@ class RoundedCard(tk.Canvas):
         if w < 10 or h < 10:
             return
         r = min(self._r, w // 2, h // 2)
-        # Doble punkter på kantene for å sikre at spline passerer gjennom,
-        # enkle punkter i hjørnene for glatt kurve.
+        # Doble punkter på kantene sikrer at spline passerer gjennom,
+        # enkle punkter i hjørnene gir glatt kurve.
         pts = [
             r, 0,       r, 0,       w - r, 0,     w - r, 0,
             w, 0,
@@ -107,7 +149,7 @@ class RoundedCard(tk.Canvas):
             0, 0,
         ]
         self.create_polygon(pts, smooth=True,
-                            fill=ScreenStyle.CARD_COLOR,
+                            fill=ScreenStyle.CARD_FILL,
                             outline=ScreenStyle.DIVIDER,
                             width=1, tags="bg")
         self.tag_lower("bg")

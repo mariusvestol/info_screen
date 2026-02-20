@@ -44,14 +44,14 @@ class WeatherFrame(tk.Frame):
         self.color = color
 
         # ── Persistent layout ─────────────────────────────────────────
-        header = tk.Frame(self, bg=ss.CARD_COLOR)
+        header = tk.Frame(self, bg=ss.CARD_FILL)
         header.pack(fill="x", padx=ss.PAD_CARD, pady=(ss.PAD_CARD, 4))
         tk.Label(header, text="Vær", font=ss.FONT_SECTION,
-                 fg=self.color, bg=ss.CARD_COLOR).pack(anchor="w")
+                 fg=self.color, bg=ss.CARD_FILL).pack(anchor="w")
 
         tk.Frame(self, bg=ss.DIVIDER, height=1).pack(fill="x", padx=ss.PAD_CARD)
 
-        self.weather_container = tk.Frame(self, bg=ss.CARD_COLOR)
+        self.weather_container = tk.Frame(self, bg=ss.CARD_FILL)
         self.weather_container.pack(fill="x", padx=ss.PAD_CARD,
                                     pady=(4, ss.PAD_CARD))
 
@@ -84,16 +84,16 @@ class WeatherFrame(tk.Frame):
         temp, wind, symbol = self.get_weather()
 
         if temp is not None:
-            row = tk.Frame(self.weather_container, bg=ss.CARD_COLOR)
+            row = tk.Frame(self.weather_container, bg=ss.CARD_FILL)
             row.pack(anchor="w", pady=2, fill="x")
 
             tk.Label(row,
                      text=f"{temp}°C  –  {wind} m/s",
                      font=ss.FONT_BODY,
                      fg=ss.TEXT_PRIMARY,
-                     bg=ss.CARD_COLOR).pack(side="left")
+                     bg=ss.CARD_FILL).pack(side="left")
 
-            icon_label = tk.Label(row, bg=ss.CARD_COLOR)
+            icon_label = tk.Label(row, bg=ss.CARD_FILL)
             icon_label.pack(side="left", padx=10)
             self.load_icon(symbol, icon_label)
         else:
@@ -101,7 +101,7 @@ class WeatherFrame(tk.Frame):
                      text=symbol,
                      font=ss.FONT_BODY,
                      fg=ss.TEXT_PRIMARY,
-                     bg=ss.CARD_COLOR).pack(anchor="w")
+                     bg=ss.CARD_FILL).pack(anchor="w")
 
         # Oppdater hvert 30. minutt
         self.after(1800000, self.update_weather)

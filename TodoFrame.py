@@ -8,15 +8,7 @@ from ScreenStyle import ScreenStyle as ss
 class TodoFrame(tk.Frame):
     """
     Henter og viser aktive Todoist-oppgaver sortert etter frist.
-
-    Kortstruktur
-    ────────────
-    ┌─ TodoFrame (card border) ────────────────────┐
-    │  header:  "Tasks"                            │
-    │  divider: ───────────────────────────────    │
-    │  content: 19.02  Forberede presentasjon      │
-    │           TBD    Kjøpe mat                   │
-    └───────────────────────────────────────────────┘
+    Bruker Todoist API v1 (api/v1).
     """
 
     def __init__(self, parent, color):
@@ -27,28 +19,30 @@ class TodoFrame(tk.Frame):
         self.all_tasks = []
 
         # ── Persistent layout ─────────────────────────────────────────
-        header = tk.Frame(self, bg=ss.CARD_COLOR)
+        header = tk.Frame(self, bg=ss.CARD_FILL)
         header.pack(fill="x", padx=ss.PAD_CARD, pady=(ss.PAD_CARD, 4))
         tk.Label(header, text="Tasks", font=ss.FONT_SECTION,
-                 fg=self.color, bg=ss.CARD_COLOR).pack(anchor="w")
+                 fg=self.color, bg=ss.CARD_FILL).pack(anchor="w")
 
         tk.Frame(self, bg=ss.DIVIDER, height=1).pack(fill="x", padx=ss.PAD_CARD)
 
-        self.tasks_container = tk.Frame(self, bg=ss.CARD_COLOR)
+        self.tasks_container = tk.Frame(self, bg=ss.CARD_FILL)
         self.tasks_container.pack(fill="x", padx=ss.PAD_CARD,
                                    pady=(4, ss.PAD_CARD))
 
         self.update_tasks()
 
-    # ── API-henting ───────────────────────────────────────────────────
+    # ── API-henting (ny v1 API) ──────────────────────────────────────
 
     def safe_fetch_tasks(self):
-        """Henter Todoist-oppgaver trygt med try/except."""
-        url = "https://api.todoist.com/rest/v2/tasks"
+        """Henter Todoist-oppgaver fra den nye API v1."""
+        url = "https://api.todoist.com/api/v1/tasks"
         try:
             response = requests.get(url, headers=self.headers)
             response.raise_for_status()
-            return response.json()
+            data = response.json()
+            # Ny API returnerer { "results": [...] }
+            return data.get("results", [])
         except Exception as e:
             print(f"Kunne ikke hente Todoist-oppgaver: {e}")
             return []
@@ -67,7 +61,7 @@ class TodoFrame(tk.Frame):
                          text="Ingen aktive oppgaver",
                          font=ss.FONT_BODY,
                          fg=ss.TEXT_SECONDARY,
-                         bg=ss.CARD_COLOR).pack(anchor="w")
+                         bg=ss.CARD_FILL).pack(anchor="w")
             else:
                 tasks_with_date    = []
                 tasks_without_date = []
@@ -99,22 +93,22 @@ class TodoFrame(tk.Frame):
                     else:
                         date_str = "TBD"
 
-                    row = tk.Frame(self.tasks_container, bg=ss.CARD_COLOR)
+                    row = tk.Frame(self.tasks_container, bg=ss.CARD_FILL)
                     row.pack(anchor="w", pady=2, fill="x")
 
                     tk.Label(row, text=date_str,
                              fg=self.color, font=ss.FONT_BODY,
-                             bg=ss.CARD_COLOR, width=10, anchor="w").pack(side="left")
+                             bg=ss.CARD_FILL, width=10, anchor="w").pack(side="left")
                     tk.Label(row, text=content,
                              font=ss.FONT_BODY, fg=ss.TEXT_PRIMARY,
-                             bg=ss.CARD_COLOR, anchor="w").pack(side="left")
+                             bg=ss.CARD_FILL, anchor="w").pack(side="left")
         except Exception as e:
             print(f"Feil ved visning av oppgaver: {e}")
             tk.Label(self.tasks_container,
                      text="Kunne ikke laste oppgaver",
                      font=ss.FONT_BODY,
                      fg=ss.TEXT_SECONDARY,
-                     bg=ss.CARD_COLOR).pack(anchor="w")
+                     bg=ss.CARD_FILL).pack(anchor="w")
 
         # Oppdater hvert minutt
         self.after(60000, self.update_tasks)

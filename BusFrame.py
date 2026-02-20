@@ -61,14 +61,14 @@ class BusFrame(tk.Frame):
 """
 
         # ── Persistent layout ─────────────────────────────────────────
-        header = tk.Frame(self, bg=ss.CARD_COLOR)
+        header = tk.Frame(self, bg=ss.CARD_FILL)
         header.pack(fill="x", padx=ss.PAD_CARD, pady=(ss.PAD_CARD, 4))
         tk.Label(header, text="Buss", font=ss.FONT_SECTION,
-                 fg=self.HEADER_COLOR, bg=ss.CARD_COLOR).pack(anchor="w")
+                 fg=self.HEADER_COLOR, bg=ss.CARD_FILL).pack(anchor="w")
 
         tk.Frame(self, bg=ss.DIVIDER, height=1).pack(fill="x", padx=ss.PAD_CARD)
 
-        self.content_frame = tk.Frame(self, bg=ss.CARD_COLOR)
+        self.content_frame = tk.Frame(self, bg=ss.CARD_FILL)
         self.content_frame.pack(fill="x", padx=ss.PAD_CARD,
                                 pady=(4, ss.PAD_CARD))
 
@@ -112,19 +112,19 @@ class BusFrame(tk.Frame):
     # ── Én busslinje ──────────────────────────────────────────────────
 
     def bus_row(self, parent, route_num, destination, wait):
-        row = tk.Frame(parent, bg=ss.CARD_COLOR)
+        row = tk.Frame(parent, bg=ss.CARD_FILL)
         row.pack(fill="x", pady=ss.PAD_ROW)
 
         photo = self._load_route_image(route_num)
         if photo:
-            tk.Label(row, image=photo, bg=ss.CARD_COLOR).pack(
+            tk.Label(row, image=photo, bg=ss.CARD_FILL).pack(
                 side="left", padx=(0, 10))
 
         tk.Label(row, text=destination, font=ss.FONT_BODY,
-                 fg=ss.TEXT_PRIMARY, bg=ss.CARD_COLOR).pack(side="left")
+                 fg=ss.TEXT_PRIMARY, bg=ss.CARD_FILL).pack(side="left")
 
         tk.Label(row, text=wait, font=ss.FONT_BODY,
-                 fg=self.HEADER_COLOR, bg=ss.CARD_COLOR).pack(side="right")
+                 fg=self.HEADER_COLOR, bg=ss.CARD_FILL).pack(side="right")
 
     # ── Periodisk oppdatering ─────────────────────────────────────────
 

@@ -48,14 +48,14 @@ class CalendarFrame(tk.Frame):
         self.all_events_today = []
 
         # ── Persistent layout ─────────────────────────────────────────
-        header = tk.Frame(self, bg=ss.CARD_COLOR)
+        header = tk.Frame(self, bg=ss.CARD_FILL)
         header.pack(fill="x", padx=ss.PAD_CARD, pady=(ss.PAD_CARD, 4))
         tk.Label(header, text="Kalender", font=ss.FONT_SECTION,
-                 fg=self.HEADER_COLOR, bg=ss.CARD_COLOR).pack(anchor="w")
+                 fg=self.HEADER_COLOR, bg=ss.CARD_FILL).pack(anchor="w")
 
         tk.Frame(self, bg=ss.DIVIDER, height=1).pack(fill="x", padx=ss.PAD_CARD)
 
-        self.content_frame = tk.Frame(self, bg=ss.CARD_COLOR)
+        self.content_frame = tk.Frame(self, bg=ss.CARD_FILL)
         self.content_frame.pack(fill="x", padx=ss.PAD_CARD,
                                 pady=(4, ss.PAD_CARD))
 
@@ -84,7 +84,7 @@ class CalendarFrame(tk.Frame):
         """Renderer en dagseksjon (tittel + hendelsesrader) i content_frame."""
         tk.Label(self.content_frame, text=label_text,
                  font=ss.FONT_SECTION, fg=self.HEADER_COLOR,
-                 bg=ss.CARD_COLOR, anchor="w").pack(anchor="w", pady=(6, 2))
+                 bg=ss.CARD_FILL, anchor="w").pack(anchor="w", pady=(6, 2))
 
         sorted_events = sorted(
             events,
@@ -99,14 +99,14 @@ class CalendarFrame(tk.Frame):
             )
             summary = event.get('summary', 'Ingen tittel')
 
-            row = tk.Frame(self.content_frame, bg=ss.CARD_COLOR)
+            row = tk.Frame(self.content_frame, bg=ss.CARD_FILL)
             row.pack(anchor="w", fill="x", pady=1)
 
             tk.Label(row, text=start_time, font=ss.FONT_BODY,
-                     fg=ss.TEXT_SECONDARY, bg=ss.CARD_COLOR,
+                     fg=ss.TEXT_SECONDARY, bg=ss.CARD_FILL,
                      width=6, anchor="w").pack(side="left")
             tk.Label(row, text=summary, font=ss.FONT_BODY,
-                     fg=ss.TEXT_PRIMARY, bg=ss.CARD_COLOR,
+                     fg=ss.TEXT_PRIMARY, bg=ss.CARD_FILL,
                      anchor="w").pack(side="left")
 
     def fetch_events_for_today_and_tomorrow(self):
@@ -146,7 +146,7 @@ class CalendarFrame(tk.Frame):
         self._render_event_list(self.all_events_today, "I dag")
 
         # Visuell luft mellom dagseksjonene
-        tk.Frame(self.content_frame, bg=ss.CARD_COLOR, height=4).pack()
+        tk.Frame(self.content_frame, bg=ss.CARD_FILL, height=4).pack()
 
         self._render_event_list(all_events_tomorrow, "I morgen")
 

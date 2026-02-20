@@ -10,17 +10,19 @@ class TimeFrame(tk.Frame):
     Pakkes til høyre i top_bar i ScreenApp (side="right").
     """
 
-    def __init__(self, parent, color):
-        super().__init__(parent, bg=ss.BG_COLOR)
+    def __init__(self, parent, color, bg_override=None):
+        bg = bg_override or ss.BG_COLOR
+        super().__init__(parent, bg=bg)
         self.color  = color
         self.parent = parent
+        self._bg = bg
 
         # Klokken i stor, tydelig aksent-farge
         self.time_label = tk.Label(
             self,
             font=ss.FONT_TIME,
             fg=color,
-            bg=ss.BG_COLOR,
+            bg=bg,
         )
         self.time_label.pack(anchor="e")
 
@@ -29,7 +31,7 @@ class TimeFrame(tk.Frame):
             self,
             font=ss.FONT_DATE,
             fg=ss.TEXT_SECONDARY,
-            bg=ss.BG_COLOR,
+            bg=bg,
         )
         self.date_label.pack(anchor="e")
 

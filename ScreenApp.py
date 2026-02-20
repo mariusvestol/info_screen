@@ -9,7 +9,7 @@ from TimeFrame import TimeFrame
 from TodoFrame import TodoFrame
 
 # Stil
-from ScreenStyle import ScreenStyle as ss, RoundedCard
+from ScreenStyle import ScreenStyle as ss, RoundedCard, GradientCanvas
 
 # Aksent hentes fra ScreenStyle – én kilde til sannhet
 ACCENT = ss.ACCENT
@@ -44,15 +44,23 @@ root.resizable(True, True)
 root.bind("<F11>", toggle_fullscreen)
 
 
+# ── Gradient-bakgrunn (Apple-stil) ────────────────────────────────────
+gradient = GradientCanvas(root)
+gradient.place(x=0, y=0, relwidth=1, relheight=1)
+
+# Farge som matcher toppen av gradienten for elementer i topplinja
+TOP_BG = ss.GRAD_TOP
+
+
 # ── Topplinje: Hilsen (venstre) + Klokke (høyre) ─────────────────────
-top_bar = tk.Frame(root, bg=ss.BG_COLOR)
+top_bar = tk.Frame(root, bg=TOP_BG)
 top_bar.pack(fill="x", padx=ss.PAD_OUTER, pady=(ss.PAD_OUTER, ss.PAD_SECTION))
 
 greeting_label = tk.Label(top_bar, text=get_greeting(), font=ss.FONT_GREETING,
-                          fg=ACCENT, bg=ss.BG_COLOR)
+                          fg=ACCENT, bg=TOP_BG)
 greeting_label.pack(side="left", anchor="w")
 
-timeFrame = TimeFrame(top_bar, ACCENT)
+timeFrame = TimeFrame(top_bar, ACCENT, bg_override=TOP_BG)
 timeFrame.pack(side="right", anchor="ne")
 
 
