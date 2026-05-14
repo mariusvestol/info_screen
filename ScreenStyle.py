@@ -16,7 +16,7 @@ class ScreenStyle:
     CARD_COLOR      = "#FFFFFF"   # Kortbakgrunn (brukes inne i kort)
     CARD_FROSTED    = "#F8F9FCEE" # Frosted glass – kan ikke bruke alpha i tk,
     CARD_FILL       = "#F1F2F6"   # Simulert frosted glass-farge
-    ACCENT          = "#3B82F6"   # Primæraksent – moderne blå
+    ACCENT          = "#F97316"   # Primæraksent – oransje
     ACCENT_LIGHT    = "#DBEAFE"   # Lys aksent (bakgrunn-highlight)
     TEXT_PRIMARY    = "#111827"   # Primærtekst – nesten svart
     TEXT_SECONDARY  = "#6B7280"   # Sekundærtekst – mellomsgrå

@@ -1,4 +1,6 @@
 import tkinter as tk
+import os
+import sqlite3
 from datetime import datetime, timedelta
 import pytz
 from dateutil import parser
@@ -46,6 +48,8 @@ class CalendarFrame(tk.Frame):
 
         self.HEADER_COLOR = color
         self.all_events_today = []
+        self.shift_db_path = os.path.join(os.path.dirname(__file__), "shift_plan.db")
+        self.timezone = pytz.timezone("Europe/Oslo")
 
         # ── Persistent layout ─────────────────────────────────────────
         header = tk.Frame(self, bg=ss.CARD_FILL)
@@ -112,7 +116,7 @@ class CalendarFrame(tk.Frame):
     def fetch_events_for_today_and_tomorrow(self):
         self.all_events_today = []
         now = datetime.utcnow().isoformat() + 'Z'
-        today    = datetime.now(pytz.timezone("Europe/Oslo")).date()
+        today    = datetime.now(self.timezone).date()
         tomorrow = today + timedelta(days=1)
 
         all_events_tomorrow = []
@@ -143,12 +147,60 @@ class CalendarFrame(tk.Frame):
                 if not page_token:
                     break
 
+        shift_today, shift_tomorrow = self.fetch_shift_events(today, tomorrow)
+        self.all_events_today.extend(shift_today)
+        all_events_tomorrow.extend(shift_tomorrow)
+
         self._render_event_list(self.all_events_today, "I dag")
 
         # Visuell luft mellom dagseksjonene
         tk.Frame(self.content_frame, bg=ss.CARD_FILL, height=4).pack()
 
         self._render_event_list(all_events_tomorrow, "I morgen")
+
+    def _shift_to_event(self, row):
+        start_dt = self.timezone.localize(
+            datetime.fromisoformat(f"{row['shift_date']}T{row['start_time']}:00")
+        )
+        end_dt = self.timezone.localize(
+            datetime.fromisoformat(f"{row['shift_date']}T{row['end_time']}:00")
+        )
+        return {
+            "summary": "Jobb (Aneo)",
+            "start": {"dateTime": start_dt.isoformat()},
+            "end": {"dateTime": end_dt.isoformat()},
+        }
+
+    def fetch_shift_events(self, today, tomorrow):
+        if not os.path.exists(self.shift_db_path):
+            return [], []
+
+        try:
+            conn = sqlite3.connect(self.shift_db_path)
+            conn.row_factory = sqlite3.Row
+            rows = conn.execute(
+                """
+                SELECT shift_date, start_time, end_time
+                FROM shifts
+                WHERE shift_date IN (?, ?)
+                ORDER BY shift_date, start_time
+                """,
+                (today.isoformat(), tomorrow.isoformat()),
+            ).fetchall()
+            conn.close()
+        except Exception as e:
+            print(f"Kunne ikke hente vakter fra shift_plan.db: {e}")
+            return [], []
+
+        today_events = []
+        tomorrow_events = []
+        for row in rows:
+            event = self._shift_to_event(row)
+            if row["shift_date"] == today.isoformat():
+                today_events.append(event)
+            else:
+                tomorrow_events.append(event)
+        return today_events, tomorrow_events
 
     # ── Periodisk oppdatering ─────────────────────────────────────────
 

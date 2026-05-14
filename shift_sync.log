@@ -1,0 +1,172 @@
+OK: lagret 17 vakter i /home/marves/Desktop/info_screen/shift_plan.db
+OK: lagret 17 vakter i /home/marves/Desktop/info_screen/shift_plan.db
+OK: lagret 17 vakter i /home/marves/Desktop/info_screen/shift_plan.db
+OK: lagret 17 vakter i /home/marves/Desktop/info_screen/shift_plan.db
+OK: lagret 17 vakter i /home/marves/Desktop/info_screen/shift_plan.db
+
+> info-screen-web@0.1.0 export:data
+> node scripts/export-data.mjs
+
+Wrote 7 shifts to /home/marves/Desktop/info_screen_web/public/data/snapshot.json
+OK: lagret 17 vakter i /home/marves/Desktop/info_screen/shift_plan.db
+
+> info-screen-web@0.1.0 export:data
+> node scripts/export-data.mjs
+
+Wrote 7 shifts to /home/marves/Desktop/info_screen_web/public/data/snapshot.json
+OK: lagret 17 vakter i /home/marves/Desktop/info_screen/shift_plan.db
+
+> info-screen-web@0.1.0 export:data
+> node scripts/export-data.mjs
+
+Wrote 7 shifts and 5 bus departures to /home/marves/Desktop/info_screen_web/public/data/snapshot.json
+OK: lagret 17 vakter i /home/marves/Desktop/info_screen/shift_plan.db
+
+> info-screen-web@0.1.0 export:data
+> node scripts/export-data.mjs
+
+Wrote 7 shifts, 5 bus departures and weather to /home/marves/Desktop/info_screen_web/public/data/snapshot.json
+OK: lagret 17 vakter i /home/marves/Desktop/info_screen/shift_plan.db
+
+> info-screen-web@0.1.0 export:data
+> node scripts/export-data.mjs
+
+Wrote 7 shifts, 5 bus departures and weather to /home/marves/Desktop/info_screen_web/public/data/snapshot.json
+OK: lagret 17 vakter i /home/marves/Desktop/info_screen/shift_plan.db
+
+> info-screen-web@0.1.0 export:data
+> node scripts/export-data.mjs
+
+Wrote 7 shifts, 5 bus departures and weather to /home/marves/Desktop/info_screen_web/public/data/snapshot.json
+OK: lagret 17 vakter i /home/marves/Desktop/info_screen/shift_plan.db
+
+> info-screen-web@0.1.0 export:data
+> node scripts/export-data.mjs
+
+Wrote 7 shifts, 5 bus departures and weather to /home/marves/Desktop/info_screen_web/public/data/snapshot.json
+OK: lagret 17 vakter i /home/marves/Desktop/info_screen/shift_plan.db
+
+> info-screen-web@0.1.0 export:data
+> node scripts/export-data.mjs
+
+Wrote 7 shifts, 5 bus departures and weather to /home/marves/Desktop/info_screen_web/public/data/snapshot.json
+OK: lagret 17 vakter i /home/marves/Desktop/info_screen/shift_plan.db
+
+> info-screen-web@0.1.0 export:data
+> node scripts/export-data.mjs
+
+Wrote 7 shifts, 5 bus departures and weather to /home/marves/Desktop/info_screen_web/public/data/snapshot.json
+OK: lagret 17 vakter i /home/marves/Desktop/info_screen/shift_plan.db
+
+> info-screen-web@0.1.0 export:data
+> node scripts/export-data.mjs
+
+Wrote 7 shifts, 5 bus departures and weather to /home/marves/Desktop/info_screen_web/public/data/snapshot.json
+OK: lagret 17 vakter i /home/marves/Desktop/info_screen/shift_plan.db
+
+> info-screen-web@0.1.0 export:data
+> node scripts/export-data.mjs
+
+Wrote 7 shifts, 5 bus departures and weather to /home/marves/Desktop/info_screen_web/public/data/snapshot.json
+OK: lagret 17 vakter i /home/marves/Desktop/info_screen/shift_plan.db
+
+> info-screen-web@0.1.0 export:data
+> node scripts/export-data.mjs
+
+Wrote 7 shifts, 5 bus departures and weather to /home/marves/Desktop/info_screen_web/public/data/snapshot.json
+OK: lagret 17 vakter i /home/marves/Desktop/info_screen/shift_plan.db
+
+> info-screen-web@0.1.0 export:data
+> node scripts/export-data.mjs
+
+Wrote 7 shifts, 5 bus departures and weather to /home/marves/Desktop/info_screen_web/public/data/snapshot.json
+OK: lagret 17 vakter i /home/marves/Desktop/info_screen/shift_plan.db
+
+> info-screen-web@0.1.0 export:data
+> node scripts/export-data.mjs
+
+Wrote 7 shifts, 5 bus departures and weather to /home/marves/Desktop/info_screen_web/public/data/snapshot.json
+OK: lagret 17 vakter i /home/marves/Desktop/info_screen/shift_plan.db
+
+> info-screen-web@0.1.0 export:data
+> node scripts/export-data.mjs
+
+Wrote 7 shifts, 5 bus departures and weather to /home/marves/Desktop/info_screen_web/public/data/snapshot.json
+OK: lagret 17 vakter i /home/marves/Desktop/info_screen/shift_plan.db
+
+> info-screen-web@0.1.0 export:data
+> node scripts/export-data.mjs
+
+Wrote 7 shifts, 5 bus departures and weather to /home/marves/Desktop/info_screen_web/public/data/snapshot.json
+OK: lagret 17 vakter i /home/marves/Desktop/info_screen/shift_plan.db
+
+> info-screen-web@0.1.0 export:data
+> node scripts/export-data.mjs
+
+Wrote 7 shifts, 5 bus departures and weather to /home/marves/Desktop/info_screen_web/public/data/snapshot.json
+OK: lagret 17 vakter i /home/marves/Desktop/info_screen/shift_plan.db
+
+> info-screen-web@0.1.0 export:data
+> node scripts/export-data.mjs
+
+Wrote 7 shifts, 5 bus departures and weather to /home/marves/Desktop/info_screen_web/public/data/snapshot.json
+OK: lagret 17 vakter i /home/marves/Desktop/info_screen/shift_plan.db
+
+> info-screen-web@0.1.0 export:data
+> node scripts/export-data.mjs
+
+Wrote 7 shifts, 5 bus departures and weather to /home/marves/Desktop/info_screen_web/public/data/snapshot.json
+OK: lagret 17 vakter i /home/marves/Desktop/info_screen/shift_plan.db
+
+> info-screen-web@0.1.0 export:data
+> node scripts/export-data.mjs
+
+Wrote 7 shifts, 5 bus departures and weather to /home/marves/Desktop/info_screen_web/public/data/snapshot.json
+OK: lagret 17 vakter i /home/marves/Desktop/info_screen/shift_plan.db
+
+> info-screen-web@0.1.0 export:data
+> node scripts/export-data.mjs
+
+Wrote 7 shifts, 5 bus departures and weather to /home/marves/Desktop/info_screen_web/public/data/snapshot.json
+OK: lagret 17 vakter i /home/marves/Desktop/info_screen/shift_plan.db
+
+> info-screen-web@0.1.0 export:data
+> node scripts/export-data.mjs
+
+Wrote 7 shifts, 5 bus departures and weather to /home/marves/Desktop/info_screen_web/public/data/snapshot.json
+OK: lagret 17 vakter i /home/marves/Desktop/info_screen/shift_plan.db
+
+> info-screen-web@0.1.0 export:data
+> node scripts/export-data.mjs
+
+Wrote 7 shifts, 5 bus departures and weather to /home/marves/Desktop/info_screen_web/public/data/snapshot.json
+OK: lagret 17 vakter i /home/marves/Desktop/info_screen/shift_plan.db
+
+> info-screen-web@0.1.0 export:data
+> node scripts/export-data.mjs
+
+Wrote 7 shifts, 7 calendar events, 5 bus departures and weather to /home/marves/Desktop/info_screen_web/public/data/snapshot.json
+OK: lagret 17 vakter i /home/marves/Desktop/info_screen/shift_plan.db
+
+> info-screen-web@0.1.0 export:data
+> node scripts/export-data.mjs
+
+Wrote 7 shifts, 7 calendar events, 2 todos, 5 bus departures and weather to /home/marves/Desktop/info_screen_web/public/data/snapshot.json
+OK: lagret 17 vakter i /home/marves/Desktop/info_screen/shift_plan.db
+
+> info-screen-web@0.1.0 export:data
+> node scripts/export-data.mjs
+
+Wrote 7 shifts, 7 calendar events, 2 todos, 5 bus departures and weather to /home/marves/Desktop/info_screen_web/public/data/snapshot.json
+OK: lagret 17 vakter i /home/marves/Desktop/info_screen/shift_plan.db
+
+> info-screen-web@0.1.0 export:data
+> node scripts/export-data.mjs
+
+Wrote 7 shifts, 3 calendar events, 2 todos, 5 bus departures and weather to /home/marves/Desktop/info_screen_web/public/data/snapshot.json
+OK: lagret 17 vakter i /home/marves/Desktop/info_screen/shift_plan.db
+
+> info-screen-web@0.1.0 export:data
+> node scripts/export-data.mjs
+
+Wrote 7 shifts, 3 calendar events, 3 todos, 5 bus departures and weather to /home/marves/Desktop/info_screen_web/public/data/snapshot.json
