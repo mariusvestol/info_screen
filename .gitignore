@@ -1,9 +1,15 @@
 key.json
 key.json
+firebase-service-account.json
 __pycache__/
 *.pyc
 .env
 .venv/
 ms_browser_profile/
 shift_plan.db
+training.db
 downloads/
+*.log
+info_screen_web/node_modules/
+info_screen_web/dist/
+info_screen_web/public/data/

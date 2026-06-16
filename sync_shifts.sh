@@ -3,9 +3,15 @@ set -euo pipefail
 
 cd /home/marves/Desktop/info_screen
 shift_status=0
+
+# Opening the workbook first refreshes SharePoint/Office cookies used by the
+# read-only file download below. If this fails, shift_sync.py still records the
+# actual sync error and the web screen keeps showing the last known shifts.
+.venv/bin/python shift_session_check.py --headless --wait-login 5 >> shift_sync.log 2>&1 || true
+
 .venv/bin/python shift_sync.py >> shift_sync.log 2>&1 || shift_status=$?
 
-WEB_DIR=/home/marves/Desktop/info_screen_web
+WEB_DIR=/home/marves/Desktop/info_screen/info_screen_web
 if [ -d "$WEB_DIR" ]; then
   npm --prefix "$WEB_DIR" run export:data >> shift_sync.log 2>&1
 fi
